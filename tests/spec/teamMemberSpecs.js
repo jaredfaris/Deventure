@@ -4,7 +4,7 @@ describe("When a team member exists", function () {
     var result;
 
     beforeEach(function() {
-        teamMember = new Deventure.TeamMember();
+        teamMember = new Deventure.TeamMember("developer");
     });
 
     describe("When getStatus() is called on the team member", function() {
@@ -19,6 +19,14 @@ describe("When a team member exists", function () {
         it("Has no status effects", function() {
             expect(Array.isArray(result.statusEffects)).toBeTruthy();
             expect(result.statusEffects.length).toEqual(0);
+        });
+
+        it("Has the assigned class name", function() {
+            expect(result.className).toEqual("developer");
+        })
+
+        it("Has a productivity of 100", function() {
+            expect(result.productivity).toEqual(100);
         });
     });
 
@@ -124,6 +132,16 @@ describe("When a team member exists", function () {
                 expect(teamMember.getStatus().health).toEqual(0);
                 expect(teamMember.getStatus().statusEffects[0].name).toEqual("dead");
             })
+        });
+    });
+
+    describe("When the character is fatigued", function() {
+        beforeEach(function() {
+           teamMember.applyEffect({name: "fatigued"});
+        });
+
+        it("Has as productivity of 50", function() {
+           expect(teamMember.getStatus().productivity).toEqual(50);
         });
     });
 });

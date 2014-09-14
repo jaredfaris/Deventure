@@ -1,16 +1,10 @@
 if ((typeof Deventure) === "undefined")
     Deventure = {};
 
-Deventure.TeamMember = function() {
+Deventure.TeamMember = function(className) {
     var health = 100;
     var statusEffects = [];
-
-    var getStatus = function() {
-        return {
-            health: health,
-            statusEffects: statusEffects
-        };
-    };
+    var className = className
 
     var dealDamage = function(amountOfDamage) {
         health = health - amountOfDamage;
@@ -42,7 +36,21 @@ Deventure.TeamMember = function() {
     var isAffectedBy = function(statusEffectName) {
         var effectNames = _.pluck(statusEffects, "name");
         return _.contains(effectNames, statusEffectName);
-    }
+    };
+
+    // productivity is generally 100 but when fatigued drops to 50
+    var getProductivity = function() {
+      return isAffectedBy("fatigued") ? 50 : 100;
+    };
+
+    var getStatus = function() {
+        return {
+            health: health,
+            statusEffects: statusEffects,
+            className: className,
+            productivity: getProductivity()
+        };
+    };
 
     return {
         getStatus: getStatus,
