@@ -83,4 +83,47 @@ describe("When a team member exists", function () {
            expect(teamMember.getStatus().statusEffects[0].name).toEqual("slowed");
         });
     });
+
+    describe("When the character is at 90 health", function() {
+        beforeEach(function() {
+            teamMember.dealDamage(10);
+        });
+
+        describe("When the character is healed 10", function() {
+            beforeEach(function() {
+                teamMember.healDamage(10);
+            });
+
+            it("Should heal the character to 100", function() {
+                expect(teamMember.getStatus().health).toEqual(100);
+            })
+        });
+
+        describe("When the character is healed 20", function() {
+            beforeEach(function() {
+                teamMember.healDamage(20);
+            });
+
+            it("Should heal the character to only 100 (no overhealing)", function() {
+                expect(teamMember.getStatus().health).toEqual(100);
+            });
+        });
+    });
+
+    describe("When the character is dead", function() {
+        beforeEach(function() {
+            teamMember.dealDamage(100);
+        });
+
+        describe("When the character is healed 10", function() {
+            beforeEach(function() {
+                teamMember.healDamage(10);
+            });
+
+            it("Nothing should happen because they are dead", function() {
+                expect(teamMember.getStatus().health).toEqual(0);
+                expect(teamMember.getStatus().statusEffects[0].name).toEqual("dead");
+            })
+        });
+    });
 });
